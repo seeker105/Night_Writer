@@ -7,7 +7,11 @@ require 'night_writer'
 
 class NightWriterTest < MiniTest::Test
 
-  test it can read in a text file and print number of characters
+  test it can read in an alphanumeric text file
+
+  test it can output an alphanumeric text file and print number of characters
+
+  test it can read a multi-char braille file and parse them into individual characters
 
   test it can output to a text_file and print number of characters
 
@@ -15,13 +19,13 @@ class NightWriterTest < MiniTest::Test
   single character braille text file
 
   test it can read in a multiple character alphanumeric file and output a
-  single character braille text file
+  multiple character braille text file
 
   test it can read in a single character braille file and output a
   single character alphanumeric text file
 
   test it can read in a multiple character braille file and output a
-  single character alphanumeric text file
+  multiple character alphanumeric text file
 
   test it can output a braille file that wraps past 80 characters
 

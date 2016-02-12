@@ -78,8 +78,33 @@ puts "\n\n\n"
 
 File.write("temp.txt", "finally!!\n\n\n\n\n\n")
 
+Char = Struct.new(:first_line, :second_line, :third_line)
+x = Char.new("0.", "..", "00")
+y = Char.new("..", ".0", "0.")
+
+puts x.first_line
+puts x.second_line
+puts x.third_line
+puts "\n\n"
+puts y.first_line
+puts y.second_line
+puts y.third_line
 
 
 # print "\e[A"
 # print "\e[A"
 # print "\e[A"
+
+
+
+# def equal(other_char)
+#   if @first_line != other_char.first_line
+#     return false
+#   elsif @second_line != other_char.second_line
+#     return false
+#   elsif @third_line != other_char.third_line
+#     return false
+#   else
+#     return true
+#   end
+# end
