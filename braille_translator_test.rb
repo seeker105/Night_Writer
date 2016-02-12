@@ -221,7 +221,6 @@ class BrailleTranslatorTest < MiniTest::Test
     assert_equal b[3].second_line,  ".."
     assert_equal b[3].third_line,   ".."
 
-
     # b = @t.translate_alpha_to_braille("n")
     assert_equal b[4].first_line,   "00"
     assert_equal b[4].second_line,  ".0"
@@ -244,9 +243,5 @@ class BrailleTranslatorTest < MiniTest::Test
     assert_equal b[7].second_line,  "0."
     assert_equal b[7].third_line,   "00"
   end
-
-
-
-
 
 end
