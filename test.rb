@@ -19,7 +19,7 @@ puts "\n\n\n"
 print "0\n"
 print "0\n"
 print "0\n"
-print "\033[2A"
+# print "\033[2A"
 
 
 

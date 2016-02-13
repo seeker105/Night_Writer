@@ -1,6 +1,6 @@
 require_relative 'char'
 
-class BrailleTranslator
+class BrailleTranslator2
 
   def initialize
     @alpha_to_braille = {
@@ -124,7 +124,8 @@ class BrailleTranslator
   def translate_alpha_to_braille(input)
     # input.map { |letter| @alpha_to_braille[letter] }
     output = []
-    input.delete("\n").each_char do |chr|
+    input.length > 1 ? input.rstrip : 
+    input.each_char do |chr|
       output << @alpha_to_braille[chr]
     end
     return output
@@ -134,7 +135,13 @@ class BrailleTranslator
 end # of class
 
 
-b = BrailleTranslator.new
-b.translate_alpha_to_braille(" ")
-
-"hello \n \n                \n".delete("\n")
+b = BrailleTranslator2.new
+b.translate_alpha_to_braille(" ") =>
+# !> /Users/christopher1/Night_Writer/bt2.rb:128: syntax error, unexpected tIDENTIFIER, expecting ':'
+# !>     input.each_char do |chr|
+# !>          ^
+# !> /Users/christopher1/Night_Writer/bt2.rb:139: syntax error, unexpected =>, expecting end-of-input
+# !> b.translate_alpha_to_braille(" ") =>
+# !>                                     ^
+# !> /Users/christopher1/.rvm/gems/ruby-2.3.0/gems/seeing_is_believing-3.0.0.beta.6/lib/seeing_is_believing/event_stream/producer.rb:97:in `record_exception': undefined method `size' for nil:NilClass (NoMethodError)
+# !> \tfrom /Users/christopher1/.rvm/gems/ruby-2.3.0/gems/seeing_is_believing-3.0.0.beta.6/lib/seeing_is_believing/the_matrix.rb:40:in `block in <top (required)>'
