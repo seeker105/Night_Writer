@@ -11,54 +11,71 @@ class NightWriter
     end
 
     def encode_file_to_braille
-      # I wouldn't worry about testing this method
-      # unless you get everything else done
-      plain = @reader.read
-      puts plain
-      plain.strip!
-      print plain
-      puts plain
-      braille_chars = @translator.translate_alpha_to_braille(plain)
-      puts braille_chars[0].first_line
-      puts braille_chars[0].second_line
-      puts braille_chars[0].third_line
+      plain = @reader.read.delete("\n")
+      # plain = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n"  # => "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n"
+      character_count = plain.length
+      finalstring = encode_to_braille(plain)
+      @writer.write(finalstring)
+    end
 
-      puts braille_chars[1].first_line
-      puts braille_chars[1].second_line
-      puts braille_chars[1].third_line
-
-      text = ""
-      3.times { plain.split.each do |word|
-        text += word + "\n"
-      end }
-
-      puts join_braille_chars_into_strings(braille_chars)
-      @writer.write(text)
-      braille = encode_to_braille(plain)
+    def concatenate_a_line_of_braille(line_number, character_array)
+      result = ""
+      character_array.each do |character|
+        result += character[line_number]
+      end
+      return result
     end
 
     def encode_to_braille(input)
-      # you've taken in an INPUT string
-      # do the magic
-      # send out an OUTPUT string
+      finalstring = ""
+      flag_special_alpha_characters(input)
+      groups = group_characters(input)
+      groups.each do |group|
+        braille_chars = @translator.alpha_to_braille(group)
+        3.times do |line_number|
+          finalstring += concatenate_a_line_of_braille(line_number, braille_chars) + "\n"
+        end # 3 times                                                                                 # => 3
+      end # groups.each
+      return finalstring
     end
 
-    def join_braille_chars_into_strings(braille_chars)
-      # binding.pry
-      first_line = second_line = third_line = ""
-      completed_strings_array = [first_line, second_line, third_line]
-      braille_chars.each do |b_char|
-        first_line += b_char.first_line
-        second_line += b_char.second_line
-        third_line += b_char.third_line
+    def group_characters(input)
+      groups = []
+      input = flag_special_alpha_characters(input)
+      while input.length > 80
+        puts input.length
+        if is_special_character(input[79])
+          groups << input.slice!(0, 79)
+        else
+          groups << input.slice!(0, 80)
+        end
+        puts "greater than 80"
       end
-      completed_strings_array[0] + "\n" +
-      completed_strings_array[1] + "\n" +
-      completed_strings_array[2]
+      puts "not greater than 80"
+      puts input.length
+      groups << input
     end
+
+    def is_special_character(character)
+      character == "&"
+    end
+
+    def flag_special_alpha_characters(input)
+      input.gsub(/[A-Z]/){ |character| "&" + character.downcase }
+    end
+
+
+
 
 
 end # of NightWriter class
+
+
+class String
+  def is_capital?
+    self == self.upcase
+  end
+end
 
 
 class FileReader
@@ -78,4 +95,43 @@ end
 if __FILE__ == $0
 nw = NightWriter.new
 nw.encode_file_to_braille
+
 end
+# @translator = BrailleTranslator.new
+# braille_chars = @translator.alpha_to_braille("abba")
+#
+#
+# 3.times do |n|
+#   n
+# end
+#
+#
+#
+# # finalstring = nw.join_braille_chars_into_strings(braille_chars)  # ~> NoMethodError: undefined method `join_braille_chars_into_strings' for #<NightWriter:0x007fb7928acf18>
+#
+# x = ["a", "b", "c", "d"]
+# x.each.with_index do |value, index|
+#   index
+#   value
+# end
+#
+# 3.times.with_index(2) do |value,x|
+#   x
+#   value
+# end
+#
+# a = [1,2,3]
+# x1 = a.shift
+# x1
+# x2 = a.shift
+# x2
+# x3 = a.shift
+# x3
+# a
+#
+# a << ""
+# a << ""
+#
+# a = a << [1]
+#
+# end

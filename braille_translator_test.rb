@@ -12,172 +12,172 @@ class BrailleTranslatorTest < MiniTest::Test
   end
 
   def test_it_can_map_a_letter_to_a_braille_characters
-    b = @t.translate_alpha_to_braille("a")
+    b = @t.alpha_to_braille("a")
     assert_equal b[0][0],   "0."
     assert_equal b[0][1],   ".."
     assert_equal b[0][2],   ".."
 
-    b = @t.translate_alpha_to_braille("b")
+    b = @t.alpha_to_braille("b")
     assert_equal b[0][0],   "0."
     assert_equal b[0][1],   "0."
     assert_equal b[0][2],   ".."
 
-    b = @t.translate_alpha_to_braille("c")
+    b = @t.alpha_to_braille("c")
     assert_equal b[0][0],   "00"
     assert_equal b[0][1],   ".."
     assert_equal b[0][2],   ".."
 
-    b = @t.translate_alpha_to_braille("d")
+    b = @t.alpha_to_braille("d")
     assert_equal b[0][0],   "00"
     assert_equal b[0][1],   ".0"
     assert_equal b[0][2],   ".."
 
-    b = @t.translate_alpha_to_braille("e")
+    b = @t.alpha_to_braille("e")
     assert_equal b[0][0],   "0."
     assert_equal b[0][1],   ".0"
     assert_equal b[0][2],   ".."
 
-    b = @t.translate_alpha_to_braille("f")
+    b = @t.alpha_to_braille("f")
     assert_equal b[0][0],   "00"
     assert_equal b[0][1],   "0."
     assert_equal b[0][2],   ".."
 
-    b = @t.translate_alpha_to_braille("g")
+    b = @t.alpha_to_braille("g")
     assert_equal b[0][0],   "00"
     assert_equal b[0][1],   "00"
     assert_equal b[0][2],   ".."
 
-    b = @t.translate_alpha_to_braille("h")
+    b = @t.alpha_to_braille("h")
     assert_equal b[0][0],   "0."
     assert_equal b[0][1],   "00"
     assert_equal b[0][2],   ".."
 
-    b = @t.translate_alpha_to_braille("i")
+    b = @t.alpha_to_braille("i")
     assert_equal b[0][0],   ".0"
     assert_equal b[0][1],   "0."
     assert_equal b[0][2],   ".."
 
-    b = @t.translate_alpha_to_braille("j")
+    b = @t.alpha_to_braille("j")
     assert_equal b[0][0],   ".0"
     assert_equal b[0][1],   "00"
     assert_equal b[0][2],   ".."
 
-    b = @t.translate_alpha_to_braille("k")
+    b = @t.alpha_to_braille("k")
     assert_equal b[0][0],   "0."
     assert_equal b[0][1],   ".."
     assert_equal b[0][2],   "0."
 
-    b = @t.translate_alpha_to_braille("l")
+    b = @t.alpha_to_braille("l")
     assert_equal b[0][0],   "0."
     assert_equal b[0][1],   "0."
     assert_equal b[0][2],   "0."
 
-    b = @t.translate_alpha_to_braille("m")
+    b = @t.alpha_to_braille("m")
     assert_equal b[0][0],   "00"
     assert_equal b[0][1],   ".."
     assert_equal b[0][2],   "0."
 
-    b = @t.translate_alpha_to_braille("n")
+    b = @t.alpha_to_braille("n")
     assert_equal b[0][0],   "00"
     assert_equal b[0][1],   ".0"
     assert_equal b[0][2],   "0."
 
-    b = @t.translate_alpha_to_braille("o")
+    b = @t.alpha_to_braille("o")
     assert_equal b[0][0],   "0."
     assert_equal b[0][1],   ".0"
     assert_equal b[0][2],   "0."
 
-    b = @t.translate_alpha_to_braille("p")
+    b = @t.alpha_to_braille("p")
     assert_equal b[0][0],   "00"
     assert_equal b[0][1],   "0."
     assert_equal b[0][2],   "0."
 
-    b = @t.translate_alpha_to_braille("q")
+    b = @t.alpha_to_braille("q")
     assert_equal b[0][0],   "00"
     assert_equal b[0][1],   "00"
     assert_equal b[0][2],   "0."
 
-    b = @t.translate_alpha_to_braille("r")
+    b = @t.alpha_to_braille("r")
     assert_equal b[0][0],   "0."
     assert_equal b[0][1],   "00"
     assert_equal b[0][2],   "0."
 
-    b = @t.translate_alpha_to_braille("s")
+    b = @t.alpha_to_braille("s")
     assert_equal b[0][0],   ".0"
     assert_equal b[0][1],   "0."
     assert_equal b[0][2],   "0."
 
-    b = @t.translate_alpha_to_braille("t")
+    b = @t.alpha_to_braille("t")
     assert_equal b[0][0],   ".0"
     assert_equal b[0][1],   "00"
     assert_equal b[0][2],   "0."
 
-    b = @t.translate_alpha_to_braille("u")
+    b = @t.alpha_to_braille("u")
     assert_equal b[0][0],   "0."
     assert_equal b[0][1],   ".."
     assert_equal b[0][2],   "00"
 
-    b = @t.translate_alpha_to_braille("v")
+    b = @t.alpha_to_braille("v")
     assert_equal b[0][0],   "0."
     assert_equal b[0][1],   "0."
     assert_equal b[0][2],   "00"
 
-    b = @t.translate_alpha_to_braille("w")
+    b = @t.alpha_to_braille("w")
     assert_equal b[0][0],   ".0"
     assert_equal b[0][1],   "00"
     assert_equal b[0][2],   ".0"
 
-    b = @t.translate_alpha_to_braille("x")
+    b = @t.alpha_to_braille("x")
     assert_equal b[0][0],   "00"
     assert_equal b[0][1],   ".."
     assert_equal b[0][2],   "00"
 
-    b = @t.translate_alpha_to_braille("y")
+    b = @t.alpha_to_braille("y")
     assert_equal b[0][0],   "00"
     assert_equal b[0][1],   ".0"
     assert_equal b[0][2],   "00"
 
-    b = @t.translate_alpha_to_braille("z")
+    b = @t.alpha_to_braille("z")
     assert_equal b[0][0],   "0."
     assert_equal b[0][1],   ".0"
     assert_equal b[0][2],   "00"
 
-    b = @t.translate_alpha_to_braille(" ")
+    b = @t.alpha_to_braille(" ")
     assert_equal b[0][0],   ".."
     assert_equal b[0][1],   ".."
     assert_equal b[0][2],   ".."
 
-    b = @t.translate_alpha_to_braille("!")
+    b = @t.alpha_to_braille("!")
     assert_equal b[0][0],   ".."
     assert_equal b[0][1],   "00"
     assert_equal b[0][2],   "0."
 
-    b = @t.translate_alpha_to_braille("'")
+    b = @t.alpha_to_braille("'")
     assert_equal b[0][0],   ".."
     assert_equal b[0][1],   ".."
     assert_equal b[0][2],   "0."
 
-    b = @t.translate_alpha_to_braille(",")
+    b = @t.alpha_to_braille(",")
     assert_equal b[0][0],   ".."
     assert_equal b[0][1],   "0."
     assert_equal b[0][2],   ".."
 
-    b = @t.translate_alpha_to_braille("-")
+    b = @t.alpha_to_braille("-")
     assert_equal b[0][0],   ".."
     assert_equal b[0][1],   ".."
     assert_equal b[0][2],   "00"
 
-    b = @t.translate_alpha_to_braille(".")
+    b = @t.alpha_to_braille(".")
     assert_equal b[0][0],   ".."
     assert_equal b[0][1],   "00"
     assert_equal b[0][2],   ".0"
 
-    b = @t.translate_alpha_to_braille("?")
+    b = @t.alpha_to_braille("?")
     assert_equal b[0][0],   ".."
     assert_equal b[0][1],   "0."
     assert_equal b[0][2],   "00"
 
-    b = @t.translate_alpha_to_braille("&")
+    b = @t.alpha_to_braille("&")
     assert_equal b[0][0],   ".."
     assert_equal b[0][1],   ".."
     assert_equal b[0][2],   ".0"
@@ -185,7 +185,7 @@ class BrailleTranslatorTest < MiniTest::Test
 
 
   def test_it_can_map_multiple_letters_to_braille_characters
-    b = @t.translate_alpha_to_braille("bob")
+    b = @t.alpha_to_braille("bob")
 
     assert_equal b[0][0],   "0."
     assert_equal b[0][1],   "0."
@@ -199,46 +199,46 @@ class BrailleTranslatorTest < MiniTest::Test
     assert_equal b[2][1],  "0."
     assert_equal b[2][2],   ".."
 
-    b = @t.translate_alpha_to_braille("why not?")
-    # b = @t.translate_alpha_to_braille("w")
+    b = @t.alpha_to_braille("why not?")
+    # b = @t.alpha_to_braille("w")
     assert_equal b[0][0],   ".0"
     assert_equal b[0][1],   "00"
     assert_equal b[0][2],   ".0"
 
 
-    # b = @t.translate_alpha_to_braille("h")
+    # b = @t.alpha_to_braille("h")
     assert_equal b[1][0],   "0."
     assert_equal b[1][1],  "00"
     assert_equal b[1][2],   ".."
 
-    # b = @t.translate_alpha_to_braille("y")
+    # b = @t.alpha_to_braille("y")
     assert_equal b[2][0],   "00"
     assert_equal b[2][1],  ".0"
     assert_equal b[2][2],   "00"
 
-    # b = @t.translate_alpha_to_braille(" ")
+    # b = @t.alpha_to_braille(" ")
     assert_equal b[3][0],   ".."
     assert_equal b[3][1],  ".."
     assert_equal b[3][2],   ".."
 
-    # b = @t.translate_alpha_to_braille("n")
+    # b = @t.alpha_to_braille("n")
     assert_equal b[4][0],   "00"
     assert_equal b[4][1],  ".0"
     assert_equal b[4][2],   "0."
 
 
-    # b = @t.translate_alpha_to_braille("o")
+    # b = @t.alpha_to_braille("o")
     assert_equal b[5][0],   "0."
     assert_equal b[5][1],  ".0"
     assert_equal b[5][2],   "0."
 
 
-    # b = @t.translate_alpha_to_braille("t")
+    # b = @t.alpha_to_braille("t")
     assert_equal b[6][0],   ".0"
     assert_equal b[6][1],  "00"
     assert_equal b[6][2],   "0."
 
-    # b = @t.translate_alpha_to_braille("?")
+    # b = @t.alpha_to_braille("?")
     assert_equal b[7][0],   ".."
     assert_equal b[7][1],  "0."
     assert_equal b[7][2],   "00"

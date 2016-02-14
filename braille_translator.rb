@@ -3,7 +3,7 @@ require_relative 'char'
 class BrailleTranslator
 
   def initialize
-    @alpha_to_braille = {
+    @alpha_to_braille_hash = {
               "a" => ["0.",
                       "..",
                       ".."],
@@ -107,25 +107,25 @@ class BrailleTranslator
                       "..",
                       ".0"]
     }
-    @braille_to_alpha = @alpha_to_braille.invert
-    # puts @braille_to_alpha
+    @braille_to_alpha_hash = @alpha_to_braille_hash.invert
+    # puts @braille_to_alpha_hash
     # puts "\n\n\n"
-    # puts @alpha_to_braille
+    # puts @alpha_to_braille_hash
     #
     # puts "\n\n\n"
-    # puts @alpha_to_braille["a"]
+    # puts @alpha_to_braille_hash["a"]
     #
     # puts "\n\n\n"
-    #   x = @alpha_to_braille["a"]
-    #   y = @alpha_to_braille["a"]
+    #   x = @alpha_to_braille_hash["a"]
+    #   y = @alpha_to_braille_hash["a"]
     # puts x.equal(y)
   end # of initialize
 
-  def translate_alpha_to_braille(input)
-    # input.map { |letter| @alpha_to_braille[letter] }
+  def alpha_to_braille(input)
+    # input.map { |letter| @alpha_to_braille_hash[letter] }
     output = []
-    input.delete("\n").each_char do |chr|
-      output << @alpha_to_braille[chr]
+    input.each_char do |character|
+      output << @alpha_to_braille_hash[character]
     end
     return output
   end
@@ -133,8 +133,9 @@ class BrailleTranslator
 
 end # of class
 
-
+if __FILE__ == $0
 b = BrailleTranslator.new
-b.translate_alpha_to_braille(" ")
+b.alpha_to_braille(" ")
 
-"hello \n \n                \n".delete("\n")
+
+end
