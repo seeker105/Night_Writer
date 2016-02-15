@@ -53,12 +53,23 @@ class NightWriter
     end
 
     def is_special_alpha_character(character)
-      character == "&"
+      (character == "&" ) || (character == "#")
     end
 
     def flag_special_alpha_characters(input)
-      input.gsub(/[A-Z]/){ |character| "&" + character.downcase }
+      input = input.gsub(/[A-Z]/){ |character| "&" + character.downcase }
+      input.gsub(/\d+/) {|number| "#" + switch_number_to_letter(number)}
     end
+
+    def switch_number_to_letter(number)
+      number.length.times do |digit_index|
+        number[digit_index] == "0" ? increment = 58 : increment = 48
+        number.setbyte(digit_index, number.getbyte(digit_index) + increment )
+      end
+      return number
+    end
+
+
 
     def encode_file_to_alpha
       braille_string = @reader.read
@@ -76,8 +87,20 @@ class NightWriter
 
     def convert_special_characters(alpha_string)
       # use a regex to convert & + character pairs to upcase character
-      alpha_string.gsub(/&[a-z]/) { |character_pair| character_pair[1].upcase }
+      alpha_string = alpha_string.gsub(/&[a-z]/) { |character_pair| character_pair[1].upcase }
+      alpha_string.gsub(/#[a-z]+(\s|\z)/) { |n| switch_letters_to_number(n)}
     end
+
+    def switch_letters_to_number(input)
+      input = input.strip
+      input = input.delete("#")
+      input.length.times do |char_index|
+        input[char_index] == "j" ? decrement = 58 : decrement = 48
+        input.setbyte(char_index, input.getbyte(char_index) - decrement )
+      end
+      return input + " "
+    end
+
 
     def parse_input_to_braille_rows(braille_string)
       braille_rows_array = ["", "", ""]
@@ -127,7 +150,17 @@ end
 
 if __FILE__ == $0
 nw = NightWriter.new
-# nw.encode_file_to_braille
-nw.encode_file_to_alpha
+# case ARGV[2]
+# when "a-b"
+#   nw.encode_file_to_braille
+# when "b-a"
+#   nw.encode_file_to_alpha
+# end
+
+x = nw.flag_special_alpha_characters("a 1234567890 c   aaaa2 dljs34 sdkljf567  8 dkjd9 fj  0")
+puts x
+
+y = nw.convert_special_characters(x)
+puts y
 
 end

@@ -105,7 +105,10 @@ class BrailleTranslator
                       "00"],
               "&" => ["..",
                       "..",
-                      ".0"]
+                      ".0"],
+              "#" => [".0",
+                      ".0",
+                      "00"]
     }
     @braille_to_alpha_hash = @alpha_to_braille_hash.invert
     # puts @braille_to_alpha_hash
