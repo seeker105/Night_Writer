@@ -192,11 +192,11 @@ class BrailleTranslatorTest < MiniTest::Test
     assert_equal b[0][2],   ".."
 
     assert_equal b[1][0],   "0."
-    assert_equal b[1][1],  ".0"
+    assert_equal b[1][1],   ".0"
     assert_equal b[1][2],   "0."
 
     assert_equal b[2][0],   "0."
-    assert_equal b[2][1],  "0."
+    assert_equal b[2][1],   "0."
     assert_equal b[2][2],   ".."
 
     b = @t.alpha_to_braille("why not?")
@@ -208,40 +208,55 @@ class BrailleTranslatorTest < MiniTest::Test
 
     # b = @t.alpha_to_braille("h")
     assert_equal b[1][0],   "0."
-    assert_equal b[1][1],  "00"
+    assert_equal b[1][1],   "00"
     assert_equal b[1][2],   ".."
 
     # b = @t.alpha_to_braille("y")
     assert_equal b[2][0],   "00"
-    assert_equal b[2][1],  ".0"
+    assert_equal b[2][1],   ".0"
     assert_equal b[2][2],   "00"
 
     # b = @t.alpha_to_braille(" ")
     assert_equal b[3][0],   ".."
-    assert_equal b[3][1],  ".."
+    assert_equal b[3][1],   ".."
     assert_equal b[3][2],   ".."
 
     # b = @t.alpha_to_braille("n")
     assert_equal b[4][0],   "00"
-    assert_equal b[4][1],  ".0"
+    assert_equal b[4][1],   ".0"
     assert_equal b[4][2],   "0."
 
 
     # b = @t.alpha_to_braille("o")
     assert_equal b[5][0],   "0."
-    assert_equal b[5][1],  ".0"
+    assert_equal b[5][1],   ".0"
     assert_equal b[5][2],   "0."
 
 
     # b = @t.alpha_to_braille("t")
     assert_equal b[6][0],   ".0"
-    assert_equal b[6][1],  "00"
+    assert_equal b[6][1],   "00"
     assert_equal b[6][2],   "0."
 
     # b = @t.alpha_to_braille("?")
     assert_equal b[7][0],   ".."
-    assert_equal b[7][1],  "0."
+    assert_equal b[7][1],   "0."
     assert_equal b[7][2],   "00"
   end
+
+  def test_it_can_map_a_braille_character_to_a_letter
+    b = [["0.", "..", ".."]]
+
+    letter = @t.braille_to_alpha(b)
+    assert_equal "a", letter
+  end
+
+  def test_it_can_map_multiple_braille_characters_to_letters
+    b = [[".0","00",".0"],["0.","00",".."],["00",".0","00"],["..","..",".."],["00",".0","0."],["0.",".0","0."],[".0","00","0."],["..","0.","00"]]
+
+    string = @t.braille_to_alpha(b)
+    assert_equal "why not?", string
+  end
+
 
 end

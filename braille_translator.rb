@@ -121,11 +121,19 @@ class BrailleTranslator
     # puts x.equal(y)
   end # of initialize
 
-  def alpha_to_braille(input)
-    # input.map { |letter| @alpha_to_braille_hash[letter] }
+  def alpha_to_braille(alpha_string)
+    #alpha_string.map { |letter| @alpha_to_braille_hash[letter] }
     output = []
-    input.each_char do |character|
+    alpha_string.each_char do |character|
       output << @alpha_to_braille_hash[character]
+    end
+    return output
+  end
+
+  def braille_to_alpha(braille_char_array)
+    output = ""
+    braille_char_array.each do |braille_char|
+      output += @braille_to_alpha_hash[braille_char]
     end
     return output
   end
@@ -136,6 +144,8 @@ end # of class
 if __FILE__ == $0
 b = BrailleTranslator.new
 b.alpha_to_braille(" ")
+
+
 
 
 end

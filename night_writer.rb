@@ -11,10 +11,11 @@ class NightWriter
     end
 
     def encode_file_to_braille
-      plain = @reader.read.delete("\n")
-      # plain = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n"  # => "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n"
-      character_count = plain.length
-      finalstring = encode_to_braille(plain)
+      alpha = @reader.read.delete("\n")
+      # alpha = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n"  # => "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\n"
+      character_count = alpha.length
+      alpha = flag_special_alpha_characters(alpha)
+      finalstring = encode_to_braille(alpha)
       @writer.write(finalstring)
       puts "Created '#{ARGV[1]}' containing #{character_count} characters"
     end
@@ -29,8 +30,7 @@ class NightWriter
 
     def encode_to_braille(input)
       finalstring = ""
-      input = flag_special_alpha_characters(input)
-      groups = group_characters(input)
+      groups = group_alpha_characters(input)
       groups.each do |group|
         braille_chars = @translator.alpha_to_braille(group)
         3.times do |line_number|
@@ -40,7 +40,7 @@ class NightWriter
       return finalstring
     end
 
-    def group_characters(input)
+    def group_alpha_characters(input)
       groups = []
       while input.length > 80
         puts input.length
@@ -64,16 +64,31 @@ class NightWriter
       input.gsub(/[A-Z]/){ |character| "&" + character.downcase }
     end
 
+    def encode_file_to_alpha
+      braille_string = @reader.read
+      puts braille_string.inspect
+      braille_char_array = encode_to_alpha(braille_string)
+    end
 
+    def encode_to_alpha(braille_string)
+      braille_char_array = []
+      while braille_string.length > 0
+        3.times do |row_number|
+          braille_char_array += split_braille_row_into_character_rows(row_number, braille_string)
+        end
+      end
+    end
 
-
+    def method_name split_braille_row_into_character_rows(row_number, braille_string)
+      output_array
+    end
 
 end # of NightWriter class
 
 
 class String
   def is_capital?
-    self == self.upcase
+    ("A".."Z").include?(self)
   end
 end
 
@@ -94,7 +109,8 @@ end
 
 if __FILE__ == $0
 nw = NightWriter.new
-nw.encode_file_to_braille
+# nw.encode_file_to_braille
+nw.encode_file_to_alpha
 
 end
 # @translator = BrailleTranslator.new
