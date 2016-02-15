@@ -43,16 +43,12 @@ class NightWriter
     def group_alpha_characters(input)
       groups = []
       while input.length > 80
-        puts input.length
         if is_special_alpha_character(input[79])
           groups << input.slice!(0, 79)
         else
           groups << input.slice!(0, 80)
         end
-        puts "greater than 80"
       end
-      puts "not greater than 80"
-      puts input.length
       groups << input
     end
 
@@ -66,21 +62,43 @@ class NightWriter
 
     def encode_file_to_alpha
       braille_string = @reader.read
-      puts braille_string.inspect
-      braille_char_array = encode_to_alpha(braille_string)
+      alpha_string = encode_to_alpha(braille_string)
+      @writer.write(alpha_string)
+      puts "Created '#{ARGV[1]}' containing #{alpha_string.length} characters"
     end
 
     def encode_to_alpha(braille_string)
-      braille_char_array = []
-      while braille_string.length > 0
-        3.times do |row_number|
-          braille_char_array += split_braille_row_into_character_rows(row_number, braille_string)
-        end
-      end
+      braille_rows_array = parse_input_to_braille_rows(braille_string)
+      braille_chars_array = parse_rows_to_braille_chars(braille_rows_array)
+      alpha_string = @translator.braille_to_alpha(braille_chars_array)
+      alpha_string = convert_special_characters(alpha_string)
     end
 
-    def method_name split_braille_row_into_character_rows(row_number, braille_string)
-      output_array
+    def convert_special_characters(alpha_string)
+      # use a regex to convert & + character pairs to upcase character
+      alpha_string.gsub(/&[a-z]/) { |character_pair| character_pair[1].upcase }
+    end
+
+    def parse_input_to_braille_rows(braille_string)
+      braille_rows_array = ["", "", ""]
+      while braille_string.length > 0
+        3.times do |row_number|
+          braille_rows_array[row_number] += braille_string.slice!(/.*\n/).delete("\n")
+        end
+      end
+      return braille_rows_array
+    end
+
+    def parse_rows_to_braille_chars(braille_rows_array)
+      braille_chars_array = []
+      while braille_rows_array[0].length > 0
+        new_braille_char = []
+        3.times do |row_number|
+          new_braille_char[row_number] = braille_rows_array[row_number].slice!(0, 2)
+        end
+        braille_chars_array << new_braille_char
+      end
+      return braille_chars_array
     end
 
 end # of NightWriter class
@@ -113,41 +131,3 @@ nw = NightWriter.new
 nw.encode_file_to_alpha
 
 end
-# @translator = BrailleTranslator.new
-# braille_chars = @translator.alpha_to_braille("abba")
-#
-#
-# 3.times do |n|
-#   n
-# end
-#
-#
-#
-# # finalstring = nw.join_braille_chars_into_strings(braille_chars)  # ~> NoMethodError: undefined method `join_braille_chars_into_strings' for #<NightWriter:0x007fb7928acf18>
-#
-# x = ["a", "b", "c", "d"]
-# x.each.with_index do |value, index|
-#   index
-#   value
-# end
-#
-# 3.times.with_index(2) do |value,x|
-#   x
-#   value
-# end
-#
-# a = [1,2,3]
-# x1 = a.shift
-# x1
-# x2 = a.shift
-# x2
-# x3 = a.shift
-# x3
-# a
-#
-# a << ""
-# a << ""
-#
-# a = a << [1]
-#
-# end
