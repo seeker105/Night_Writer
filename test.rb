@@ -41,6 +41,13 @@ class FunClass
     return input + " "
   end
 
+  def convert_word_to_contraction(word)
+    puts word
+    # word.include?("&") ? caps = "&" : caps = ""
+    # " " + caps + @translator.convert_word_to_contraction(word.strip.delete("&")) + " "
+  end
+
+
 end
 
 puts "\n\n\n"
@@ -48,6 +55,15 @@ puts "\n\n\n"
 t= FunClass.new
 x = "a 1234567890 c   aaaa2 dljs34 sdkljf567  8 dkjd9 fj  0"
 t.print_one
+
+
+input = "&you have to go!"
+# input.gsub(/(\s)[a-z]+\s/){ |word|  t.convert_word_to_contraction(word) }
+
+y = input.split
+puts "Y EQUALS:"
+puts y
+
 
 # x.each_byte do |n|
 #   puts n
