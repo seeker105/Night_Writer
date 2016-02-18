@@ -619,8 +619,220 @@ class NightWriterTest < MiniTest::Test
       output = @nw.group_alpha_characters(chars_161)
       assert_equal ["12345678901234567890123456789012345678901234567890123456789012345678901234567890",
                     "12345678901234567890123456789012345678901234567890123456789012345678901234567890", "1"], output
+    end
+
+    def test_encoding_a_string_to_braille
+      input = "abc"
+
+      expected1 = "0.0.00"
+      expected2 = "..0..."
+      expected3 = "......"
+      expected = expected1 + "\n" + expected2 + "\n" + expected3 + "\n"
+
+      output = @nw.encode_to_braille(input)
+      assert_equal expected, output
+    end
+
+    def test_encoding_a_string_with_a_capital_to_braille
+      input = "&bc"
+
+      expected1 = "..0.00"
+      expected2 = "..0..."
+      expected3 = ".0...."
+      expected = expected1 + "\n" + expected2 + "\n" + expected3 + "\n"
+
+      output = @nw.encode_to_braille(input)
+      assert_equal expected, output
+    end
+
+    def test_encoding_a_string_to_braille_that_breaks_into_a_second_line
+      input = ""
+      85.times do
+        input += "a"
+      end
+
+      expected_line1 = ""
+      expected_line2 = ""
+      expected_line3 = ""
+      expected_line4 = ""
+      expected_line5 = ""
+      expected_line6 = ""
+      80.times do
+        expected_line1 += "0."
+      end
+      80.times do
+        expected_line2 += ".."
+        expected_line3 += ".."
+      end
+      5.times do
+        expected_line4 += "0."
+      end
+      5.times do
+        expected_line5 += ".."
+        expected_line6 += ".."
+      end
+
+      expected = expected_line1 + "\n" + expected_line2 + "\n" + expected_line3 + "\n" +
+                 expected_line4 + "\n" + expected_line5 + "\n" + expected_line6 + "\n"
+
+      output = @nw.encode_to_braille(input)
+      assert_equal expected, output
 
     end
+
+
+    def test_encoding_a_string_to_braille_with_a_Capital_that_moves_to_next_line
+      input = ""
+      79.times do
+        input += "a"
+      end
+      input += "&a"
+
+      expected_line1 = ""
+      expected_line2 = ""
+      expected_line3 = ""
+      expected_line4 = ""
+      expected_line5 = ""
+      expected_line6 = ""
+      79.times do
+        expected_line1 += "0."
+      end
+      79.times do
+        expected_line2 += ".."
+      end
+      79.times do
+        expected_line3 += ".."
+      end
+      expected_line4 = "..0."
+      expected_line5 = "...."
+      expected_line6 = ".0.."
+
+      expected = expected_line1 + "\n" + expected_line2 + "\n" + expected_line3 + "\n" +
+                 expected_line4 + "\n" + expected_line5 + "\n" + expected_line6 + "\n"
+
+      output = @nw.encode_to_braille(input)
+      assert_equal expected, output
+    end
+
+    def test_encoding_a_braille_to_a_string
+      alpha = "abc"
+
+      braille1 = "0.0.00"
+      braille2 = "..0..."
+      braille3 = "......"
+      braille = braille1 + "\n" + braille2 + "\n" + braille3 + "\n"
+
+      output = @nw.encode_to_alpha(braille)
+      assert_equal alpha, output
+    end
+
+    def test_encoding_a_string_with_a_capital_to_braille
+      alpha = "&bc"
+
+      braille1 = "..0.00"
+      braille2 = "..0..."
+      braille3 = ".0...."
+      braille = braille1 + "\n" + braille2 + "\n" + braille3 + "\n"
+
+      output = @nw.encode_to_alpha(braille)
+      assert_equal alpha, output
+    end
+
+    def test_encoding_a_string_to_braille_that_breaks_into_a_second_line
+      alpha = ""
+      85.times do
+        alpha += "a"
+      end
+
+      braille_line1 = ""
+      braille_line2 = ""
+      braille_line3 = ""
+      braille_line4 = ""
+      braille_line5 = ""
+      braille_line6 = ""
+      80.times do
+        braille_line1 += "0."
+      end
+      80.times do
+        braille_line2 += ".."
+        braille_line3 += ".."
+      end
+      5.times do
+        braille_line4 += "0."
+      end
+      5.times do
+        braille_line5 += ".."
+        braille_line6 += ".."
+      end
+
+      braille = braille_line1 + "\n" + braille_line2 + "\n" + braille_line3 + "\n" +
+                 braille_line4 + "\n" + braille_line5 + "\n" + braille_line6 + "\n"
+
+      output = @nw.encode_to_alpha(braille)
+      assert_equal alpha, output
+    end
+
+
+    def test_encoding_a_string_to_braille_with_a_Capital_that_moves_to_next_line
+      alpha = ""
+      79.times do
+        alpha += "a"
+      end
+      alpha += "&a"
+
+      braille_line1 = ""
+      braille_line2 = ""
+      braille_line3 = ""
+      braille_line4 = ""
+      braille_line5 = ""
+      braille_line6 = ""
+      79.times do
+        braille_line1 += "0."
+      end
+      79.times do
+        braille_line2 += ".."
+      end
+      79.times do
+        braille_line3 += ".."
+      end
+      braille_line4 = "..0."
+      braille_line5 = "...."
+      braille_line6 = ".0.."
+
+      braille = braille_line1 + "\n" + braille_line2 + "\n" + braille_line3 + "\n" +
+                 braille_line4 + "\n" + braille_line5 + "\n" + braille_line6 + "\n"
+
+      output = @nw.encode_to_alpha(braille)
+      assert_equal alpha, output
+    end
+
+    def test_encode_file_to_braille_and_encode_file_to_alpha_methods
+      # test with a single lowercase letter - done
+      #
+      # test with lowercase and uppercase letters - done
+      #
+      # test with all uppercase letters - done
+      #
+      # test with a single number - done
+      #
+      # test with multiple numbers - done
+      #
+      # test with a sentence including lowercase, capitals and number - done
+      #
+      # test with numbers and letters going past 80 chars - done
+      #
+      # test with more than 180 alpha chars wrapping to multiple lines of braille text - done
+      #
+      # All Done!
+      #
+    end
+
+
+
+
+
+
+
 
 
 

@@ -22,6 +22,7 @@ class NightWriter
   def encode_file_to_alpha
     braille_string = @reader.read
     alpha_string = encode_to_alpha(braille_string)
+    alpha_string = convert_special_characters(alpha_string)
     @writer.write(alpha_string)
     puts "Created '#{ARGV[1]}' containing #{alpha_string.length} characters"
   end
@@ -37,59 +38,6 @@ class NightWriter
 
 
 
-  # def group_alpha_characters(input) #old with contraction slice attemp
-  #   groups = []
-  #   slice_point = 80
-  #   while input.length > slice_point
-  #     slice_point = check_for_contraction_slice(input)
-  #     if is_special_alpha_character(input[slice_point-1])
-  #       groups << input.slice!(0, slice_point-1)
-  #     else
-  #       groups << input.slice!(0, slice_point)
-  #     end
-  #   end
-  #   groups << input
-  # end
-
-  # def check_for_contraction_slice(input)
-  #   # this should only be called when input.length > 80
-  #   contraction_match_array = find_all_contractions(input)
-  #   #if no contractions slice at 80 characters
-  #   if contraction_match_array.length == 0
-  #     return 80
-  #   end
-  #
-  #   # if there are 2 or more contractions check if we have a pair crossing the slice
-  #   if contraction_match_array.length > 1
-  #     (contraction_match_array.length-1).times do |contraction_number|
-  #       if (contraction_match_array[contraction_number].end(0) == 79) & (contraction_match_array[contraction_number+1].begin(0) == 79)
-  #         return contraction_match_array[contraction_number].begin(0)
-  #       end
-  #     end
-  #   end
-  #
-  #   # if a contraction crosses the slice then slice it before the contraction
-  #   contraction_match_array.each do |contraction_match|
-  #     if (contraction_match.begin(0) < 79) & (contraction_match.end(0) > 80)
-  #       return contraction_match.begin(0)
-  #     end
-  #   end
-  #   # if no contractions cross the slice return the regular value
-  #   return 80
-  #
-  # end
-
-  # def find_all_contractions(input)
-  #   contraction_match_array = []
-  #   start_index = 0
-  #   while ( contraction_match = input.match(/(\s|\s&)[a-z]\s/, start_index) ) != nil
-  #     start_index = contraction_match.end(0) - 1
-  #     if @translator.is_contraction?(contraction_match.to_s.strip.delete("&"))
-  #       contraction_match_array << contraction_match
-  #     end
-  #   end
-  #   return contraction_match_array
-  # end
 
 
 
@@ -110,17 +58,11 @@ class NightWriter
     braille_rows_array = parse_input_to_braille_rows(braille_string)
     braille_chars_array = parse_rows_to_braille_chars(braille_rows_array)
     alpha_string = @translator.braille_to_alpha(braille_chars_array)
-    alpha_string = convert_special_characters(alpha_string)
   end
 
 
 
   #----------------------------------------------------------
-
-  # def contraction_found?(input, start_index)
-  #   possible_contraction = input.match(/(\s|\s&)[a-z]+\s/, start_index).to_s
-  #   x = @translator.is_contraction?(possible_contraction.strip.delete("&"))
-  # end
 
   def remove_spaces_and_caps(word)
     word.strip.delete("&")
@@ -299,11 +241,64 @@ class NightWriter
 
 
 
+  # def contraction_found?(input, start_index)
+  #   possible_contraction = input.match(/(\s|\s&)[a-z]+\s/, start_index).to_s
+  #   x = @translator.is_contraction?(possible_contraction.strip.delete("&"))
+  # end
+  #
+  # def group_alpha_characters(input) #old with contraction slice attemp
+  #   groups = []
+  #   slice_point = 80
+  #   while input.length > slice_point
+  #     slice_point = check_for_contraction_slice(input)
+  #     if is_special_alpha_character(input[slice_point-1])
+  #       groups << input.slice!(0, slice_point-1)
+  #     else
+  #       groups << input.slice!(0, slice_point)
+  #     end
+  #   end
+  #   groups << input
+  # end
 
+  # def check_for_contraction_slice(input)
+  #   # this should only be called when input.length > 80
+  #   contraction_match_array = find_all_contractions(input)
+  #   #if no contractions slice at 80 characters
+  #   if contraction_match_array.length == 0
+  #     return 80
+  #   end
+  #
+  #   # if there are 2 or more contractions check if we have a pair crossing the slice
+  #   if contraction_match_array.length > 1
+  #     (contraction_match_array.length-1).times do |contraction_number|
+  #       if (contraction_match_array[contraction_number].end(0) == 79) & (contraction_match_array[contraction_number+1].begin(0) == 79)
+  #         return contraction_match_array[contraction_number].begin(0)
+  #       end
+  #     end
+  #   end
+  #
+  #   # if a contraction crosses the slice then slice it before the contraction
+  #   contraction_match_array.each do |contraction_match|
+  #     if (contraction_match.begin(0) < 79) & (contraction_match.end(0) > 80)
+  #       return contraction_match.begin(0)
+  #     end
+  #   end
+  #   # if no contractions cross the slice return the regular value
+  #   return 80
+  #
+  # end
 
-
-
-
+  # def find_all_contractions(input)
+  #   contraction_match_array = []
+  #   start_index = 0
+  #   while ( contraction_match = input.match(/(\s|\s&)[a-z]\s/, start_index) ) != nil
+  #     start_index = contraction_match.end(0) - 1
+  #     if @translator.is_contraction?(contraction_match.to_s.strip.delete("&"))
+  #       contraction_match_array << contraction_match
+  #     end
+  #   end
+  #   return contraction_match_array
+  # end
 
 end # of NightWriter class
 
