@@ -19,19 +19,19 @@ class NightWriterTest < MiniTest::Test
   end
 
 
-  def test_removes_spaces_and_caps
-    word = " but "
-    assert_equal "but", @nw.remove_spaces_and_caps(word)
-
-    word = " b "
-    assert_equal "b", @nw.remove_spaces_and_caps(word)
-
-    word = " &but "
-    assert_equal "but", @nw.remove_spaces_and_caps(word)
-
-    word = " &b "
-    assert_equal "b", @nw.remove_spaces_and_caps(word)
-  end
+  # def test_removes_spaces_and_caps
+  #   word = " but "
+  #   assert_equal "but", @nw.remove_spaces_and_caps(word)
+  #
+  #   word = " b "
+  #   assert_equal "b", @nw.remove_spaces_and_caps(word)
+  #
+  #   word = " &but "
+  #   assert_equal "but", @nw.remove_spaces_and_caps(word)
+  #
+  #   word = " &b "
+  #   assert_equal "b", @nw.remove_spaces_and_caps(word)
+  # end
 
   def test_convert_a_short_array_lowercase_braille_rows_to_an_array_of_lowercase_braille_chars
     braille_rows_array = ["0.0.0.0.", "........", "........"]
@@ -227,177 +227,177 @@ class NightWriterTest < MiniTest::Test
 
   def test_it_correctly_flags_numbers
     input = "1"
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal "#a", output
 
     input = "12"
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal "#ab", output
 
     input = "123"
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal "#abc", output
 
     input = "1234"
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal "#abcd", output
 
     input = "12345"
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal "#abcde", output
 
     input = "123456"
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal "#abcdef", output
 
     input = "1234567"
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal "#abcdefg", output
 
     input = "12345678"
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal "#abcdefgh", output
 
     input = "123456789"
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal "#abcdefghi", output
 
     input = "1234567890"
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal "#abcdefghij", output
   end
 
   def test_it_correctly_flags_capital_letters
     input = "Why?"
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal "&why?", output
 
     input = "WHy?"
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal "&w&hy?", output
 
     input = "WHY?"
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal "&w&h&y?", output
 
     input = "WHY nOt?"
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal "&w&h&y n&ot?", output
   end
 
   def test_it_correctly_converts_words_to_contractions
     input = " Can we?"
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal " &c we?", output
 
     input = "How can we?"
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal "&how c we?", output
 
     input = "You have to go!"
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal "&you h to go!", output
 
     input = "We should go to the market."
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal "&we should g to the market.", output
   end
 
   def test_converting_single_word_contractions_spaced_vs_unspaced
     input = "but"
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal "but", output
 
     input = " but "
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal " b ", output
 
     input = "But"
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal "&but", output
 
     input = " But "
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal " &b ", output
   end
 
   def test_converting_to_contractions_at_the_beginning_and_end_of_sentence
     input = "Go to the market, you must."
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal "&go to the market, y must.", output
 
     input = " Go to the market, you must."
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal " &g to the market, y must.", output
 
     input = " Go to the market, must you"
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal " &g to the market, must you", output
 
     input = " Go to the market, must you "
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal " &g to the market, must y ", output
 
     input = "Go to the market, must you "
-    output = @nw.flag_special_alpha_characters(input)
+    output = @nw.convert_special_alpha_characters(input)
     assert_equal "&go to the market, must y ", output
   end
 
   def test_it_correctly_converts_contractions_to_words
     input = " &c we?"
-    output = @nw.convert_special_characters(input)
+    output = @nw.revert_special_alpha_characters(input)
     assert_equal " Can we?", output
 
     input = "&how c we?"
-    output = @nw.convert_special_characters(input)
+    output = @nw.revert_special_alpha_characters(input)
     assert_equal "How can we?", output
 
     input = "&you h to go!"
-    output = @nw.convert_special_characters(input)
+    output = @nw.revert_special_alpha_characters(input)
     assert_equal "You have to go!", output
 
     input = "&we should g to the market."
-    output = @nw.convert_special_characters(input)
+    output = @nw.revert_special_alpha_characters(input)
     assert_equal "We should go to the market.", output
   end
 
   def test_converting_single_contractions_to_words_spaced_vs_unspaced
     input = "but"
-    output = @nw.convert_special_characters(input)
+    output = @nw.revert_special_alpha_characters(input)
     assert_equal "but", output
 
     input = " b "
-    output = @nw.convert_special_characters(input)
+    output = @nw.revert_special_alpha_characters(input)
     assert_equal " but ", output
 
     input = "&but"
-    output = @nw.convert_special_characters(input)
+    output = @nw.revert_special_alpha_characters(input)
     assert_equal "But", output
 
     input = " &b "
-    output = @nw.convert_special_characters(input)
+    output = @nw.revert_special_alpha_characters(input)
     assert_equal " But ", output
   end
 
   def test_converting_to_contractions_at_the_beginning_and_end_of_sentence
     input = "&go to the market, y must."
-    output = @nw.convert_special_characters(input)
+    output = @nw.revert_special_alpha_characters(input)
     assert_equal "Go to the market, you must.", output
 
     input = " &g to the market, y must."
-    output = @nw.convert_special_characters(input)
+    output = @nw.revert_special_alpha_characters(input)
     assert_equal " Go to the market, you must.", output
 
     input = " &g to the market, must you"
-    output = @nw.convert_special_characters(input)
+    output = @nw.revert_special_alpha_characters(input)
     assert_equal " Go to the market, must you", output
 
     input = " &g to the market, must y "
-    output = @nw.convert_special_characters(input)
+    output = @nw.revert_special_alpha_characters(input)
     assert_equal " Go to the market, must you ", output
 
     input = "&go to the market, must y "
-    output = @nw.convert_special_characters(input)
+    output = @nw.revert_special_alpha_characters(input)
     assert_equal "Go to the market, must you ", output
   end
 
@@ -407,119 +407,119 @@ class NightWriterTest < MiniTest::Test
 
 
 
-    def test_it_correctly_converts_contractions_to_words_using_the_contraction_conversion_process_method
+    def test_it_correctly_converts_contractions_to_words_using_the_process_contractions_method
       input = " &c we?"
-      output = @nw.contraction_conversion_process(input, :contraction_to_word)
+      output = @nw.process_contractions(input, :contraction_to_word)
       assert_equal " &can we?", output
 
       input = "&how c we?"
-      output = @nw.contraction_conversion_process(input, :contraction_to_word)
+      output = @nw.process_contractions(input, :contraction_to_word)
       assert_equal "&how can we?", output
 
       input = "&you h to go!"
-      output = @nw.contraction_conversion_process(input, :contraction_to_word)
+      output = @nw.process_contractions(input, :contraction_to_word)
       assert_equal "&you have to go!", output
 
       input = "&we should g to the market."
-      output = @nw.contraction_conversion_process(input, :contraction_to_word)
+      output = @nw.process_contractions(input, :contraction_to_word)
       assert_equal "&we should go to the market.", output
     end
 
-    def test_converting_single_contractions_to_words_spaced_vs_unspaced_using_the_contraction_conversion_process_method
+    def test_converting_single_contractions_to_words_spaced_vs_unspaced_using_the_process_contractions_method
       input = "but"
-      output = @nw.contraction_conversion_process(input, :contraction_to_word)
+      output = @nw.process_contractions(input, :contraction_to_word)
       assert_equal "but", output
 
       input = " b "
-      output = @nw.contraction_conversion_process(input, :contraction_to_word)
+      output = @nw.process_contractions(input, :contraction_to_word)
       assert_equal " but ", output
 
       input = "&but"
-      output = @nw.contraction_conversion_process(input, :contraction_to_word)
+      output = @nw.process_contractions(input, :contraction_to_word)
       assert_equal "&but", output
 
       input = " &b "
-      output = @nw.contraction_conversion_process(input, :contraction_to_word)
+      output = @nw.process_contractions(input, :contraction_to_word)
       assert_equal " &but ", output
     end
 
-    def test_converting_to_contractions_at_the_beginning_and_end_of_sentence_using_the_contraction_conversion_process_method
+    def test_converting_to_contractions_at_the_beginning_and_end_of_sentence_using_the_process_contractions_method
       input = "&go to the market, y must."
-      output = @nw.contraction_conversion_process(input, :contraction_to_word)
+      output = @nw.process_contractions(input, :contraction_to_word)
       assert_equal "&go to the market, you must.", output
 
       input = " &g to the market, y must."
-      output = @nw.contraction_conversion_process(input, :contraction_to_word)
+      output = @nw.process_contractions(input, :contraction_to_word)
       assert_equal " &go to the market, you must.", output
 
       input = " &g to the market, must you"
-      output = @nw.contraction_conversion_process(input, :contraction_to_word)
+      output = @nw.process_contractions(input, :contraction_to_word)
       assert_equal " &go to the market, must you", output
 
       input = " &g to the market, must y "
-      output = @nw.contraction_conversion_process(input, :contraction_to_word)
+      output = @nw.process_contractions(input, :contraction_to_word)
       assert_equal " &go to the market, must you ", output
 
       input = "&go to the market, must y "
-      output = @nw.contraction_conversion_process(input, :contraction_to_word)
+      output = @nw.process_contractions(input, :contraction_to_word)
       assert_equal "&go to the market, must you ", output
     end
 
-    def test_it_correctly_converts_words_to_contractions_using_the_contraction_conversion_process_method
+    def test_it_correctly_converts_words_to_contractions_using_the_process_contractions_method
       input = " &can we?"
-      output = @nw.contraction_conversion_process(input, :word_to_contraction)
+      output = @nw.process_contractions(input, :word_to_contraction)
       assert_equal " &c we?", output
 
       input = "&how can we?"
-      output = @nw.contraction_conversion_process(input, :word_to_contraction)
+      output = @nw.process_contractions(input, :word_to_contraction)
       assert_equal "&how c we?", output
 
       input = "&you have to go!"
-      output = @nw.contraction_conversion_process(input, :word_to_contraction)
+      output = @nw.process_contractions(input, :word_to_contraction)
       assert_equal "&you h to go!", output
 
       input = "&we should go to the market."
-      output = @nw.contraction_conversion_process(input, :word_to_contraction)
+      output = @nw.process_contractions(input, :word_to_contraction)
       assert_equal "&we should g to the market.", output
     end
 
-    def test_converting_single_word_contractions_spaced_vs_unspaced_using_the_contraction_conversion_process_method
+    def test_converting_single_word_contractions_spaced_vs_unspaced_using_the_process_contractions_method
       input = "but"
-      output = @nw.contraction_conversion_process(input, :word_to_contraction)
+      output = @nw.process_contractions(input, :word_to_contraction)
       assert_equal "but", output
 
       input = " but "
-      output = @nw.contraction_conversion_process(input, :word_to_contraction)
+      output = @nw.process_contractions(input, :word_to_contraction)
       assert_equal " b ", output
 
       input = "&but"
-      output = @nw.contraction_conversion_process(input, :word_to_contraction)
+      output = @nw.process_contractions(input, :word_to_contraction)
       assert_equal "&but", output
 
       input = " &but "
-      output = @nw.contraction_conversion_process(input, :word_to_contraction)
+      output = @nw.process_contractions(input, :word_to_contraction)
       assert_equal " &b ", output
     end
 
-    def test_converting_to_contractions_at_the_beginning_and_end_of_sentence_using_the_contraction_conversion_process_method
+    def test_converting_to_contractions_at_the_beginning_and_end_of_sentence_using_the_process_contractions_method
       input = "&go to the market, you must."
-      output = @nw.contraction_conversion_process(input, :word_to_contraction)
+      output = @nw.process_contractions(input, :word_to_contraction)
       assert_equal "&go to the market, y must.", output
 
       input = " &go to the market, you must."
-      output = @nw.contraction_conversion_process(input, :word_to_contraction)
+      output = @nw.process_contractions(input, :word_to_contraction)
       assert_equal " &g to the market, y must.", output
 
       input = " &go to the market, must you"
-      output = @nw.contraction_conversion_process(input, :word_to_contraction)
+      output = @nw.process_contractions(input, :word_to_contraction)
       assert_equal " &g to the market, must you", output
 
       input = " &go to the market, must you "
-      output = @nw.contraction_conversion_process(input, :word_to_contraction)
+      output = @nw.process_contractions(input, :word_to_contraction)
       assert_equal " &g to the market, must y ", output
 
       input = "&go to the market, must you "
-      output = @nw.contraction_conversion_process(input, :word_to_contraction)
+      output = @nw.process_contractions(input, :word_to_contraction)
       assert_equal "&go to the market, must y ", output
     end
 

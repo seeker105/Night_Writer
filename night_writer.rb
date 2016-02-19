@@ -13,7 +13,7 @@ class NightWriter
   def encode_file_to_braille
     alpha = @reader.read.delete("\n")
     character_count = alpha.length
-    alpha = flag_special_alpha_characters(alpha)
+    alpha = convert_special_alpha_characters(alpha)
     finalstring = encode_to_braille(alpha)
     @writer.write(finalstring)
     puts "Created '#{ARGV[1]}' containing #{character_count} characters"
@@ -21,25 +21,11 @@ class NightWriter
 
   def encode_file_to_alpha
     braille_string = @reader.read
-    alpha_string = encode_to_alpha(braille_string)
-    alpha_string = convert_special_characters(alpha_string)
-    @writer.write(alpha_string)
-    puts "Created '#{ARGV[1]}' containing #{alpha_string.length} characters"
+    input = encode_to_alpha(braille_string)
+    input = revert_special_alpha_characters(input)
+    @writer.write(input)
+    puts "Created '#{ARGV[1]}' containing #{input.length} characters"
   end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   def encode_to_braille(input)
     finalstring = ""
@@ -53,19 +39,10 @@ class NightWriter
     return finalstring
   end
 
-
   def encode_to_alpha(braille_string)
     braille_rows_array = parse_input_to_braille_rows(braille_string)
     braille_chars_array = parse_rows_to_braille_chars(braille_rows_array)
-    alpha_string = @translator.braille_to_alpha(braille_chars_array)
-  end
-
-
-
-  #----------------------------------------------------------
-
-  def remove_spaces_and_caps(word)
-    word.strip.delete("&")
+    @translator.braille_to_alpha(braille_chars_array)
   end
 
   def is_special_alpha_character(character)
@@ -103,8 +80,6 @@ class NightWriter
   end
 
   def switch_letters_to_number(input)
-    # if there's a space after the number when it comes we need a space at the end
-    # when it goes out
     input[-1] == " " ? end_char = " " : end_char = ""
     input = input.strip
     input = input.delete("#")
@@ -117,44 +92,33 @@ class NightWriter
 
   def convert_word_to_contraction(word)
     word.include?("&") ? caps = "&" : caps = ""
-    caps + @translator.convert_word_to_contraction(word.strip.delete("&"))
+    caps + @translator.convert_word_to_contraction(word.delete("&"))
   end
 
   def convert_contraction_to_word(character)
     character.include?("&") ? caps = "&" : caps = ""
-    caps + @translator.convert_contraction_to_word(character.strip.delete("&"))
+    caps + @translator.convert_contraction_to_word(character.delete("&"))
   end
 
-  def flag_special_alpha_characters(input)
+  def convert_special_alpha_characters(input)
     input = input.gsub(/[A-Z]/){ |character| "&" + character.downcase }
-    input = contraction_conversion_process(input, :word_to_contraction)
+    input = process_contractions(input, :word_to_contraction)
     input.gsub(/\d+/) {|number| switch_number_to_letter(number)}
   end
 
-  def convert_special_characters(alpha_string)
-    alpha_string = alpha_string.gsub(/#[a-z]+(\s|\z)/) { |character| switch_letters_to_number(character)}
-    alpha_string = contraction_conversion_process(alpha_string, :contraction_to_word)
-    # alpha_string = alpha_string.gsub(/(\s|\s&)[a-z]\s/) { |character| convert_contraction_to_word(character) }
-    alpha_string.gsub(/&[a-z]/) { |character_pair| character_pair[1].upcase }
+  def revert_special_alpha_characters(input)
+    input = input.gsub(/#[a-z]+(\s|\z)/) { |character| switch_letters_to_number(character)}
+    input = process_contractions(input, :contraction_to_word)
+    input.gsub(/&[a-z]/) { |character_pair| character_pair[1].upcase }
   end
 
-  def contraction_conversion_process(input, direction)
+  def process_contractions(input, direction)
     input.delete("\n")
     words_array = input.split
-    if input[0] == " "
-      first_char = " "
-      start_index = 0
-    else
-      first_char = ""
-      start_index = 1
-    end
-    if input[-1] == " "
-      end_char = " "
-      end_index = words_array.length - 1
-    else
-      end_char = ""
-      end_index = words_array.length - 2
-    end
+    input[0] == " " ? (first_char, start_index = " ", 0) :
+                      (first_char, start_index = "", 1)
+    input[-1] == " " ? (end_char, end_index = " ", words_array.length - 1) :
+                       (end_char, end_index = "", words_array.length - 2)
     if start_index <= end_index
       start_index.upto(end_index) do |index|
         case direction
@@ -179,126 +143,11 @@ class NightWriter
   def group_alpha_characters(input)
     groups = []
     while input.length > 80
-      if is_special_alpha_character(input[79])
-        groups << input.slice!(0, 79)
-      else
-        groups << input.slice!(0, 80)
-      end
+      is_special_alpha_character(input[79]) ? (groups << input.slice!(0, 79)) :
+                                              (groups << input.slice!(0, 80))
     end
     groups << input
   end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  # def contraction_found?(input, start_index)
-  #   possible_contraction = input.match(/(\s|\s&)[a-z]+\s/, start_index).to_s
-  #   x = @translator.is_contraction?(possible_contraction.strip.delete("&"))
-  # end
-  #
-  # def group_alpha_characters(input) #old with contraction slice attemp
-  #   groups = []
-  #   slice_point = 80
-  #   while input.length > slice_point
-  #     slice_point = check_for_contraction_slice(input)
-  #     if is_special_alpha_character(input[slice_point-1])
-  #       groups << input.slice!(0, slice_point-1)
-  #     else
-  #       groups << input.slice!(0, slice_point)
-  #     end
-  #   end
-  #   groups << input
-  # end
-
-  # def check_for_contraction_slice(input)
-  #   # this should only be called when input.length > 80
-  #   contraction_match_array = find_all_contractions(input)
-  #   #if no contractions slice at 80 characters
-  #   if contraction_match_array.length == 0
-  #     return 80
-  #   end
-  #
-  #   # if there are 2 or more contractions check if we have a pair crossing the slice
-  #   if contraction_match_array.length > 1
-  #     (contraction_match_array.length-1).times do |contraction_number|
-  #       if (contraction_match_array[contraction_number].end(0) == 79) & (contraction_match_array[contraction_number+1].begin(0) == 79)
-  #         return contraction_match_array[contraction_number].begin(0)
-  #       end
-  #     end
-  #   end
-  #
-  #   # if a contraction crosses the slice then slice it before the contraction
-  #   contraction_match_array.each do |contraction_match|
-  #     if (contraction_match.begin(0) < 79) & (contraction_match.end(0) > 80)
-  #       return contraction_match.begin(0)
-  #     end
-  #   end
-  #   # if no contractions cross the slice return the regular value
-  #   return 80
-  #
-  # end
-
-  # def find_all_contractions(input)
-  #   contraction_match_array = []
-  #   start_index = 0
-  #   while ( contraction_match = input.match(/(\s|\s&)[a-z]\s/, start_index) ) != nil
-  #     start_index = contraction_match.end(0) - 1
-  #     if @translator.is_contraction?(contraction_match.to_s.strip.delete("&"))
-  #       contraction_match_array << contraction_match
-  #     end
-  #   end
-  #   return contraction_match_array
-  # end
 
 end # of NightWriter class
 
@@ -325,18 +174,12 @@ class FileWriter
 end
 
 if __FILE__ == $0
-nw = NightWriter.new
-case ARGV[2]
-when "a-b"
-  nw.encode_file_to_braille
-when "b-a"
-  nw.encode_file_to_alpha
-end
-
-# x = nw.flag_special_alpha_characters("a 1234567890 c   aaaa2 dljs34 sdkljf567  8 dkjd9 fj  0")
-# puts x
-#
-# y = nw.convert_special_characters(x)
-# puts y
+  nw = NightWriter.new
+  case ARGV[2]
+  when "a-b"
+    nw.encode_file_to_braille
+  when "b-a"
+    nw.encode_file_to_alpha
+  end
 
 end

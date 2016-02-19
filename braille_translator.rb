@@ -253,7 +253,6 @@ class BrailleTranslator
   end # of initialize
 
   def alpha_to_braille(alpha_string)
-    #alpha_string.map { |letter| @alpha_to_braille_hash[letter] }
     output = []
     alpha_string.each_char do |character|
       output << @alpha_to_braille_hash[character]
@@ -268,10 +267,6 @@ class BrailleTranslator
     end
     return output
   end
-
-  # def is_contraction?(character)
-  #   @alpha_to_braille_contractions_hash.include?(character)
-  # end
 
   def is_word_contraction?(word)
     @alpha_word_to_contraction_hash.include?(word)

@@ -258,5 +258,108 @@ class BrailleTranslatorTest < MiniTest::Test
     assert_equal "why not?", string
   end
 
+  def test_it_returns_true_if_a_word_has_a_contraction_match
+    hash = {
+              "a" => "a",
+              "b" => "but",
+              "c" => "can",
+              "d" => "do",
+              "e" => "every",
+              "f" => "from",
+              "g" => "go",
+              "h" => "have",
+              "i" => "in",
+              "j" => "just",
+              "k" => "knowledge",
+              "l" => "like",
+              "m" => "more",
+              "n" => "not",
+              "o" => "out",
+              "p" => "people",
+              "q" => "quite",
+              "r" => "rather",
+              "s" => "so",
+              "t" => "that",
+              "u" => "us",
+              "v" => "very",
+              "w" => "will",
+              "x" => "it",
+              "y" => "you",
+              "z" => "as",
+              "C" => "child",
+              "S" => "shall",
+              "T" => "this",
+              "W" => "which",
+              "E" => "enough",
+              "B" => "were"
+    }
+
+    hash.each do |pair|
+      assert @t.is_word_contraction?(pair[1])
+    end
+
+    refute @t.is_word_contraction?("smile")
+  end
+
+  def test_it_returns_true_if_a_letter_has_a_word_contraction_match
+    hash = {
+              "a" => "a",
+              "b" => "but",
+              "c" => "can",
+              "d" => "do",
+              "e" => "every",
+              "f" => "from",
+              "g" => "go",
+              "h" => "have",
+              "i" => "in",
+              "j" => "just",
+              "k" => "knowledge",
+              "l" => "like",
+              "m" => "more",
+              "n" => "not",
+              "o" => "out",
+              "p" => "people",
+              "q" => "quite",
+              "r" => "rather",
+              "s" => "so",
+              "t" => "that",
+              "u" => "us",
+              "v" => "very",
+              "w" => "will",
+              "x" => "it",
+              "y" => "you",
+              "z" => "as",
+              "C" => "child",
+              "S" => "shall",
+              "T" => "this",
+              "W" => "which",
+              "E" => "enough",
+              "B" => "were"
+    }
+
+    hash.each do |pair|
+      assert @t.is_character_contraction?(pair[0])
+    end
+
+    refute @t.is_character_contraction?("!")
+    refute @t.is_character_contraction?(".")
+  end
+
+  def test_it_takes_a_letter_contraction_and_returns_the_word
+    assert_equal "from", @t.convert_contraction_to_word("f")
+  end
+
+  def test_it_takes_a_word_and_returns_the_contracted_letter
+    assert_equal "f", @t.convert_word_to_contraction("from")
+  end
+
+  def test_if_it_tries_to_convert_a_non_contraction_word_it_returns_the_word
+    assert_equal "rose", @t.convert_word_to_contraction("rose")
+  end
+
+  def test_if_it_tries_to_convert_a_non_contraction_character_it_returns_the_character
+    assert_equal "!", @t.convert_contraction_to_word("!")
+  end
+
 
 end
