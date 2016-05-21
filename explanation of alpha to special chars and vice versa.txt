@@ -1,0 +1,69 @@
+def convert_special_alpha_characters(input)
+  # input is the string we read in from the file to convert to braille_chars
+  # the [A-Z] pattern finds ONE character that matches from the group A-Z. So it
+  # finds one capital letter.
+  # the block takes that match and returns my cap marker & and the downcase
+  # version of that letter
+  input = input.gsub(/[A-Z]/){ |character| "&" + character.downcase }
+  input = process_contractions(input, :word_to_contraction)
+
+  # the \d+ pattern finds one or more digits and passes that match to the block
+  # the switch_number_to_letter method processes the match and changes it to
+  # letters. The last step in switch_number_to_letter puts a "#" in front of the
+  # return value. Since it passes back to gsub, the gsub replaces the
+  # match it found - a group of digits - with the return value of
+  # switch_number_to_letter which is "#someletters"
+  input.gsub(/\d+/) {|number| switch_number_to_letter(number)}
+end
+
+
+def switch_number_to_letter(number)
+  number.length.times do |digit_index|
+    number[digit_index] == "0" ? increment = 58 : increment = 48
+    number.setbyte(digit_index, number.getbyte(digit_index) + increment )
+  end
+  return "#" + number
+end
+
+
+
+
+  # For this method I started by converting my braille characters back to a
+  # string of letters and then processed them to letters to numbers (#ab becomes
+  # 12) and then convert caps (&a becomes A)
+  # When going to braille I did capitals conversion before number conversion
+  # and when going from braille to letters I reversed it - numbers then capitals
+def revert_special_alpha_characters(input)
+  # In this regex the "#" character matches a single "#" character, and [a-z]
+  # matches a single lowercase letter. Putting "+" after [a-z] lets it match one or more
+  # lowercase letters. A number pattern always ends with a space - per the problem
+  # so the \s matches a single space or newline (whitespace). The \z matches
+  # end of string. So it catches the case where the number is the last thing in the
+  # string. The "|" is an OR and the parenthesis binds the two into one thing it
+  # looks for. So (\s|\z) matches a space/newline OR end of file i.e. end of string
+
+  # It gives the match to the switch_number_to_letter method which takes the
+  # match and changes it into a number. Since it passes the result back to gsub
+  # gsub replaces what it found with the result of the method.
+  input = input.gsub(/#[a-z]+(\s|\z)/) { |character| switch_letters_to_number(character)}
+  input = process_contractions(input, :contraction_to_word)
+
+  # This match pattern includes the Caps marker "&" so I only upcase the second
+  # character (at index 1 of the match)
+  input.gsub(/&[a-z]/) { |character_pair| character_pair[1].upcase }
+end
+
+
+def switch_letters_to_number(input)
+  input[-1] == " " ? end_char = " " : end_char = ""
+  # Because the match pattern can include whitespace I remove it with .strip
+  input = input.strip
+  # Then remove the "#"
+  input = input.delete("#")
+  # Then convert the letters to digits
+  input.length.times do |char_index|
+    input[char_index] == "j" ? decrement = 58 : decrement = 48
+    input.setbyte(char_index, input.getbyte(char_index) - decrement )
+  end
+  return input + end_char
+end

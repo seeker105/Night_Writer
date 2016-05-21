@@ -18,21 +18,6 @@ class NightWriterTest < MiniTest::Test
     refute @nw.is_special_alpha_character("a")
   end
 
-
-  # def test_removes_spaces_and_caps
-  #   word = " but "
-  #   assert_equal "but", @nw.remove_spaces_and_caps(word)
-  #
-  #   word = " b "
-  #   assert_equal "b", @nw.remove_spaces_and_caps(word)
-  #
-  #   word = " &but "
-  #   assert_equal "but", @nw.remove_spaces_and_caps(word)
-  #
-  #   word = " &b "
-  #   assert_equal "b", @nw.remove_spaces_and_caps(word)
-  # end
-
   def test_convert_a_short_array_lowercase_braille_rows_to_an_array_of_lowercase_braille_chars
     braille_rows_array = ["0.0.0.0.", "........", "........"]
     braille_chars_array = @nw.parse_rows_to_braille_chars(braille_rows_array)

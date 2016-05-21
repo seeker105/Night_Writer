@@ -79,6 +79,12 @@ class NightWriter
     return "#" + number
   end
 
+  def convert_special_alpha_characters(input)
+    input = input.gsub(/[A-Z]/){ |character| "&" + character.downcase }
+    input = process_contractions(input, :word_to_contraction)
+    input.gsub(/\d+/) {|number| switch_number_to_letter(number)}
+  end
+
   def switch_letters_to_number(input)
     input[-1] == " " ? end_char = " " : end_char = ""
     input = input.strip
@@ -98,12 +104,6 @@ class NightWriter
   def convert_contraction_to_word(character)
     character.include?("&") ? caps = "&" : caps = ""
     caps + @translator.convert_contraction_to_word(character.delete("&"))
-  end
-
-  def convert_special_alpha_characters(input)
-    input = input.gsub(/[A-Z]/){ |character| "&" + character.downcase }
-    input = process_contractions(input, :word_to_contraction)
-    input.gsub(/\d+/) {|number| switch_number_to_letter(number)}
   end
 
   def revert_special_alpha_characters(input)
@@ -181,5 +181,4 @@ if __FILE__ == $0
   when "b-a"
     nw.encode_file_to_alpha
   end
-
 end
